@@ -1,0 +1,13 @@
+﻿  HeatTransferModel.cpp
+HeatTransferModel.cpp(1363): warning C4305: “=”: 从“double”到“float”截断
+HeatTransferModel.cpp(1364): warning C4305: “=”: 从“double”到“float”截断
+HeatTransferModel.cpp(1402): warning C4305: “=”: 从“double”到“float”截断
+HeatTransferModel.cpp(1449): warning C4838: 从“double”转换到“float”需要收缩转换
+HeatTransferModel.cpp(1449): warning C4305: “初始化”: 从“double”到“float”截断
+  正在生成代码
+  1 of 30 functions ( 3.3%) were compiled, the rest were copied from previous compilation.
+    0 functions were new in current compilation
+    4 functions had inline decision re-evaluated but remain unchanged
+  已完成代码的生成
+  2D_HeatTransferModel.vcxproj -> C:\Users\Administrator\Desktop\My paper\Dynamic Inverse problem\code\CPU_3DContinuousCastingMPC\Release\2D_HeatTransferModel.exe
+  2D_HeatTransferModel.vcxproj -> C:\Users\Administrator\Desktop\My paper\Dynamic Inverse problem\code\CPU_3DContinuousCastingMPC\Release\2D_HeatTransferModel.pdb (Full PDB)

@@ -1,0 +1,116 @@
+﻿  HeatTransferModel.cpp
+C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\stdio.h(309): error C2144: 语法错误:“int”的前面应有“;”
+C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\stdio.h(309): error C4430: 缺少类型说明符 - 假定为 int。注意: C++ 不支持默认 int
+C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\stdio.h(311): error C2144: 语法错误:“int”的前面应有“;”
+C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\stdio.h(311): error C4430: 缺少类型说明符 - 假定为 int。注意: C++ 不支持默认 int
+C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\stdio.h(311): error C2086: “int _CRTIMP_ALTERNATIVE”: 重定义
+  C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\stdio.h(309): note: 参见“_CRTIMP_ALTERNATIVE”的声明
+C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\stdio.h(317): error C2144: 语法错误:“int”的前面应有“;”
+C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\stdio.h(317): error C4430: 缺少类型说明符 - 假定为 int。注意: C++ 不支持默认 int
+C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\stdio.h(317): error C2086: “int _CRTIMP_ALTERNATIVE”: 重定义
+  C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\stdio.h(309): note: 参见“_CRTIMP_ALTERNATIVE”的声明
+C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\stdio.h(320): error C2144: 语法错误:“int”的前面应有“;”
+C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\stdio.h(320): error C4430: 缺少类型说明符 - 假定为 int。注意: C++ 不支持默认 int
+C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\stdio.h(320): error C2086: “int _CRTIMP_ALTERNATIVE”: 重定义
+  C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\stdio.h(309): note: 参见“_CRTIMP_ALTERNATIVE”的声明
+C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\stdio.h(327): error C2144: 语法错误:“int”的前面应有“;”
+C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\stdio.h(327): error C4430: 缺少类型说明符 - 假定为 int。注意: C++ 不支持默认 int
+C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\stdio.h(327): error C2086: “int _CRTIMP_ALTERNATIVE”: 重定义
+  C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\stdio.h(309): note: 参见“_CRTIMP_ALTERNATIVE”的声明
+C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\stdio.h(329): error C2144: 语法错误:“int”的前面应有“;”
+C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\stdio.h(329): error C4430: 缺少类型说明符 - 假定为 int。注意: C++ 不支持默认 int
+C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\stdio.h(329): error C2086: “int _CRTIMP_ALTERNATIVE”: 重定义
+  C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\stdio.h(309): note: 参见“_CRTIMP_ALTERNATIVE”的声明
+C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\stdio.h(332): error C2144: 语法错误:“int”的前面应有“;”
+C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\stdio.h(332): error C4430: 缺少类型说明符 - 假定为 int。注意: C++ 不支持默认 int
+C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\stdio.h(332): error C2086: “int _CRTIMP_ALTERNATIVE”: 重定义
+  C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\stdio.h(309): note: 参见“_CRTIMP_ALTERNATIVE”的声明
+C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\stdio.h(333): error C2144: 语法错误:“int”的前面应有“;”
+C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\stdio.h(333): error C4430: 缺少类型说明符 - 假定为 int。注意: C++ 不支持默认 int
+C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\stdio.h(333): error C2086: “int _CRTIMP_ALTERNATIVE”: 重定义
+  C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\stdio.h(309): note: 参见“_CRTIMP_ALTERNATIVE”的声明
+C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\stdio.h(354): error C2144: 语法错误:“int”的前面应有“;”
+C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\stdio.h(354): error C4430: 缺少类型说明符 - 假定为 int。注意: C++ 不支持默认 int
+C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\stdio.h(354): error C2086: “int _CRTIMP_ALTERNATIVE”: 重定义
+  C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\stdio.h(309): note: 参见“_CRTIMP_ALTERNATIVE”的声明
+C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\stdio.h(358): warning C4003: “__DEFINE_CPP_OVERLOAD_STANDARD_NFUNC_0_2_ARGLIST_EX”宏的实参不足
+C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\stdio.h(358): error C2146: 语法错误: 缺少“;”(在标识符“_vsnprintf”的前面)
+C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\stdio.h(358): error C2143: 语法错误: 缺少“,”(在“*”的前面)
+C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\stdio.h(358): error C4430: 缺少类型说明符 - 假定为 int。注意: C++ 不支持默认 int
+C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\stdio.h(358): error C2199: 语法错误: 在全局范围内找到“char (”(是否使用声明?)
+C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\stdio.h(358): error C2062: 意外的类型“char”
+C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\stdio.h(361): error C2144: 语法错误:“int”的前面应有“;”
+C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\stdio.h(361): error C4430: 缺少类型说明符 - 假定为 int。注意: C++ 不支持默认 int
+C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\stdio.h(361): error C2086: “int _CRTIMP_ALTERNATIVE”: 重定义
+  C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\stdio.h(309): note: 参见“_CRTIMP_ALTERNATIVE”的声明
+C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\stdio.h(366): warning C4003: “__DEFINE_CPP_OVERLOAD_STANDARD_FUNC_0_1_ARGLIST”宏的实参不足
+C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\stdio.h(366): error C2146: 语法错误: 缺少“;”(在标识符“vsprintf”的前面)
+C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\stdio.h(366): error C2143: 语法错误: 缺少“,”(在“*”的前面)
+C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\stdio.h(366): error C4430: 缺少类型说明符 - 假定为 int。注意: C++ 不支持默认 int
+C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\stdio.h(366): error C2365: “sprintf”: 重定义；以前的定义是“数据变量”
+  C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\stdio.h(366): note: 参见“sprintf”的声明
+C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\stdio.h(399): error C2144: 语法错误:“int”的前面应有“;”
+C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\stdio.h(399): error C4430: 缺少类型说明符 - 假定为 int。注意: C++ 不支持默认 int
+C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\stdio.h(399): error C2086: “int _CRTIMP_ALTERNATIVE”: 重定义
+  C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\stdio.h(309): note: 参见“_CRTIMP_ALTERNATIVE”的声明
+C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\stdio.h(402): error C2144: 语法错误:“int”的前面应有“;”
+C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\stdio.h(402): error C4430: 缺少类型说明符 - 假定为 int。注意: C++ 不支持默认 int
+C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\stdio.h(402): error C2086: “int _CRTIMP_ALTERNATIVE”: 重定义
+  C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\stdio.h(309): note: 参见“_CRTIMP_ALTERNATIVE”的声明
+C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\stdio.h(411): error C2144: 语法错误:“int”的前面应有“;”
+C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\stdio.h(411): error C4430: 缺少类型说明符 - 假定为 int。注意: C++ 不支持默认 int
+C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\stdio.h(411): error C2086: “int _CRTIMP_ALTERNATIVE”: 重定义
+  C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\stdio.h(309): note: 参见“_CRTIMP_ALTERNATIVE”的声明
+C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\stdio.h(466): error C2144: 语法错误:“int”的前面应有“;”
+C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\stdio.h(466): error C4430: 缺少类型说明符 - 假定为 int。注意: C++ 不支持默认 int
+C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\stdio.h(466): error C2086: “int _CRTIMP_ALTERNATIVE”: 重定义
+  C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\stdio.h(309): note: 参见“_CRTIMP_ALTERNATIVE”的声明
+C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\stdio.h(470): error C2144: 语法错误:“int”的前面应有“;”
+C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\stdio.h(470): error C4430: 缺少类型说明符 - 假定为 int。注意: C++ 不支持默认 int
+C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\stdio.h(470): error C2086: “int _CRTIMP_ALTERNATIVE”: 重定义
+  C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\stdio.h(309): note: 参见“_CRTIMP_ALTERNATIVE”的声明
+C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\stdio.h(477): error C2144: 语法错误:“int”的前面应有“;”
+C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\stdio.h(477): error C4430: 缺少类型说明符 - 假定为 int。注意: C++ 不支持默认 int
+C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\stdio.h(477): error C2086: “int _CRTIMP_ALTERNATIVE”: 重定义
+  C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\stdio.h(309): note: 参见“_CRTIMP_ALTERNATIVE”的声明
+C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\stdio.h(479): error C2144: 语法错误:“int”的前面应有“;”
+C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\stdio.h(479): error C4430: 缺少类型说明符 - 假定为 int。注意: C++ 不支持默认 int
+C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\stdio.h(479): error C2086: “int _CRTIMP_ALTERNATIVE”: 重定义
+  C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\stdio.h(309): note: 参见“_CRTIMP_ALTERNATIVE”的声明
+C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\stdio.h(483): warning C4003: “__DEFINE_CPP_OVERLOAD_STANDARD_NFUNC_0_2_ARGLIST_EX”宏的实参不足
+C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\stdio.h(483): error C2146: 语法错误: 缺少“;”(在标识符“_vsnwprintf”的前面)
+C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\stdio.h(483): error C2143: 语法错误: 缺少“,”(在“*”的前面)
+C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\stdio.h(483): error C4430: 缺少类型说明符 - 假定为 int。注意: C++ 不支持默认 int
+C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\stdio.h(483): error C2199: 语法错误: 在全局范围内找到“wchar_t (”(是否使用声明?)
+C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\stdio.h(483): error C2062: 意外的类型“wchar_t”
+C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\stdio.h(511): error C2144: 语法错误:“int”的前面应有“;”
+C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\stdio.h(511): error C4430: 缺少类型说明符 - 假定为 int。注意: C++ 不支持默认 int
+C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\stdio.h(511): error C2086: “int _CRTIMP_ALTERNATIVE”: 重定义
+  C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\stdio.h(309): note: 参见“_CRTIMP_ALTERNATIVE”的声明
+C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\stdio.h(514): error C2144: 语法错误:“int”的前面应有“;”
+C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\stdio.h(514): error C4430: 缺少类型说明符 - 假定为 int。注意: C++ 不支持默认 int
+C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\stdio.h(514): error C2086: “int _CRTIMP_ALTERNATIVE”: 重定义
+  C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\stdio.h(309): note: 参见“_CRTIMP_ALTERNATIVE”的声明
+C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\stdio.h(521): error C2144: 语法错误:“int”的前面应有“;”
+C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\stdio.h(521): error C4430: 缺少类型说明符 - 假定为 int。注意: C++ 不支持默认 int
+C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\stdio.h(521): error C2086: “int _CRTIMP_ALTERNATIVE”: 重定义
+  C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\stdio.h(309): note: 参见“_CRTIMP_ALTERNATIVE”的声明
+C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\stdio.h(523): error C2144: 语法错误:“int”的前面应有“;”
+C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\stdio.h(523): error C4430: 缺少类型说明符 - 假定为 int。注意: C++ 不支持默认 int
+C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\stdio.h(523): error C2086: “int _CRTIMP_ALTERNATIVE”: 重定义
+  C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\stdio.h(309): note: 参见“_CRTIMP_ALTERNATIVE”的声明
+C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\stdio.h(539): warning C4003: “__DEFINE_CPP_OVERLOAD_STANDARD_FUNC_0_1_ARGLIST_EX”宏的实参不足
+C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\stdio.h(539): error C2146: 语法错误: 缺少“;”(在标识符“_swprintf_s”的前面)
+C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\stdio.h(539): error C2143: 语法错误: 缺少“,”(在“*”的前面)
+C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\stdio.h(539): error C4430: 缺少类型说明符 - 假定为 int。注意: C++ 不支持默认 int
+C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\stdio.h(539): error C2146: 语法错误: 缺少“;”(在标识符“vswprintf_s”的前面)
+C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\stdio.h(539): error C2733: “vswprintf_s”: 不允许重载函数的第二个 C 链接
+  C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\stdio.h(470): note: 参见“vswprintf_s”的声明
+C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\stdio.h(540): warning C4003: “__DEFINE_CPP_OVERLOAD_STANDARD_FUNC_0_2_ARGLIST_EX”宏的实参不足
+C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\stdio.h(540): error C2146: 语法错误: 缺少“;”(在标识符“__vswprintf_l”的前面)
+C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\stdio.h(540): error C2143: 语法错误: 缺少“,”(在“*”的前面)
+C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\stdio.h(540): error C4430: 缺少类型说明符 - 假定为 int。注意: C++ 不支持默认 int
+C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\stdio.h(540): error C2146: 语法错误: 缺少“;”(在标识符“_vswprintf_s_l”的前面)
+C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\stdio.h(540): error C2733: “_vswprintf_s_l”: 不允许重载函数的第二个 C 链接
+  C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\stdio.h(514): note: 参见“_vswprintf_s_l”的声明
+C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\stdio.h(544): fatal error C1083: 无法打开包括文件: “swprintf.inl”: No such file or directory
