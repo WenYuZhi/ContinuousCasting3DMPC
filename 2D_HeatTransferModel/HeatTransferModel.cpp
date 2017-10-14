@@ -62,26 +62,47 @@ class Temperature
 		Steel* steel;	
     public:
 		int tstep;
-		float* T_Calculation;
 		float* meantemperature;
-		Temperature(int, int, int, float, float, float, float);
+		float* computetemperature;
 		Temperature(int, int, int, int, float, float, float, float, float, ContinuousCaster &, Steel &);
 		Temperature(const Temperature &);
 		~Temperature();
 		void differencecalculation3d(float*);
-		void boundarycondition2d(ContinuousCaster & CasterOne, float*);
 		void boundarycondition3d(ContinuousCaster & CasterOne, float*, int);
 		void initcondition3d(float);
 		void initcondition3d(float*);
 		void print3d(int);
 		void print3d();
 		void computetemperature3d(float *, int);
-		void getmeasuredtemperature(float *, int);
 		void computemeantemperature3d();
 		void operator=(const Temperature &);
 };
 
-Temperature::Temperature(int m_nx, int m_ny, int m_tnpts, float m_tf, float m_lx, float m_ly, float m_vcast)
+class Temperature2d
+{
+    private:
+	    float vcast;
+	    float h;
+	    float* T_New;
+	    float* T_Last;
+	    float* T_Surface;
+	    bool disout;
+	    int nx, ny, tnpts;
+	    float dx, dy, tao, tf, lx, ly;
+	    ContinuousCaster* mCasterOne;
+	    Steel* steel;
+    public:
+		int tstep;
+		float* computetemperature;
+	    Temperature2d(int, int, int, float, float, float, float, ContinuousCaster &, Steel &);
+		~Temperature2d();
+		void differencecalculation2d(float*);
+		void boundarycondition2d(ContinuousCaster & CasterOne, float*);
+		void initcondition2d();
+		void computetemperature2d(float *, int);
+};
+
+Temperature2d::Temperature2d(int m_nx, int m_ny, int m_tnpts, float m_tf, float m_lx, float m_ly, float m_vcast, ContinuousCaster & m_CasterOne, Steel & m_steel)
 {
 	nx = m_nx;
 	ny = m_ny;
@@ -98,6 +119,245 @@ Temperature::Temperature(int m_nx, int m_ny, int m_tnpts, float m_tf, float m_lx
 	vcast = m_vcast;
 	tstep = 0;
 	disout = true;
+}
+
+Temperature2d::~Temperature2d()
+{
+	delete [] T_New;
+	delete [] T_Last;
+	delete [] T_Surface;
+	delete [] computetemperature;
+}
+
+void Temperature2d::differencecalculation2d(float* hinit)  
+{
+	float a, Tw = 30.0, T_Up, T_Down, T_Right, T_Left, T_Middle;
+	this->boundarycondition2d(*mCasterOne, hinit);
+	if (disout == 0)
+	{
+		for (int i = 0; i < nx; i++)
+		{
+			for (int j = 0; j < ny; j++)
+			{
+				steel->physicalpara(T_Last[i * ny + j]);
+				a = steel->lamda / (steel->pho * steel->ce);
+				if (i == 0 && j != 0 && j != ny - 1)  //1
+				{
+					T_Up = T_Last[(i + 1)*ny + j];
+					T_Down = T_Last[(i + 1)*ny + j] - 2 * dx * h * (T_Last[i*ny + j] - Tw) / steel->lamda;
+					T_Right = T_Last[i*ny + j + 1];
+					T_Left = T_Last[i*ny + j - 1];
+					T_Middle = T_Last[i*ny + j];
+					T_New[i * ny + j] = (a / (dx*dx))*T_Up + (a / (dx*dx))*T_Down + (1 - 2 * a / (dy*dy) - 2 * a / (dx*dx))*T_Middle + (a / (dy*dy))*T_Right + (a / (dy*dy))*T_Left;
+				}
+				else if (i == nx - 1 && j != 0 && j != ny - 1)//2
+				{
+					T_Up = T_Last[(i - 1)*ny + j] - 2 * dx*h*(T_Last[i*ny + j] - Tw) / steel->lamda;
+					T_Down = T_Last[(i - 1)*ny + j];
+					T_Right = T_Last[i*ny + j + 1];
+					T_Left = T_Last[i*ny + j - 1];
+					T_Middle = T_Last[i*ny + j];
+					T_New[i * ny + j] = (a / (dx*dx))*T_Up + (a / (dx*dx))*T_Down + (1 - 2 * a / (dy*dy) - 2 * a / (dx*dx))*T_Middle + (a / (dy*dy))*T_Right + (a / (dy*dy))*T_Left;
+				}
+				else if (j == 0 && i != 0 && i != nx - 1)//3
+				{
+					T_Up = T_Last[(i + 1)*ny + j];
+					T_Down = T_Last[(i - 1)*ny + j];
+					T_Right = T_Last[i*ny + j + 1];
+					T_Left = T_Last[i*ny + j + 1] - 2 * dy*h*(T_Last[i*ny + j] - Tw) / steel->lamda;
+					T_Middle = T_Last[i*ny + j];
+					T_New[i * ny + j] = (a / (dx*dx))*T_Up + (a / (dx*dx))*T_Down + (1 - 2 * a / (dy*dy) - 2 * a / (dx*dx))*T_Middle + (a / (dy*dy))*T_Right + (a / (dy*dy))*T_Left;
+				}
+				else if (j == ny - 1 && i != 0 && i != nx - 1)//4
+				{
+					T_Up = T_Last[(i + 1)*ny + j];
+					T_Down = T_Last[(i - 1)*ny + j];
+					T_Right = T_Last[i*ny + j - 1] - 2 * dy*h*(T_Last[i*ny + j] - Tw) / steel->lamda;
+					T_Left = T_Last[i*ny + j - 1];
+					T_Middle = T_Last[i*ny + j];
+					T_New[i * ny + j] = (a / (dx*dx))*T_Up + (a / (dx*dx))*T_Down + (1 - 2 * a / (dy*dy) - 2 * a / (dx*dx))*T_Middle + (a / (dy*dy))*T_Right + (a / (dy*dy))*T_Left;
+				}
+				else if (i == 0 && j == 0)//5
+				{
+					T_Up = T_Last[(i + 1)*ny + j];
+					T_Down = T_Last[(i + 1)*ny + j];
+					T_Right = T_Last[i*ny + j + 1];
+					T_Left = T_Last[i*ny + j + 1];
+					T_Middle = T_Last[i*ny + j];
+					T_New[i * ny + j] = (a / (dx*dx))*T_Up + (a / (dx*dx))*T_Down + (1 - 2 * a / (dy*dy) - 2 * a / (dx*dx))*T_Middle + (a / (dy*dy))*T_Right + (a / (dy*dy))*T_Left;
+				}
+				else if (i == 0 && j == ny - 1)//6
+				{
+					T_Up = T_Last[(i + 1)*ny + j];
+					T_Down = T_Last[(i + 1)*ny + j];
+					T_Right = T_Last[i*ny + j - 1];
+					T_Left = T_Last[i*ny + j - 1];
+					T_Middle = T_Last[i*ny + j];
+					T_New[i * ny + j] = (a / (dx*dx))*T_Up + (a / (dx*dx))*T_Down + (1 - 2 * a / (dy*dy) - 2 * a / (dx*dx))*T_Middle + (a / (dy*dy))*T_Right + (a / (dy*dy))*T_Left;
+				}
+				else if (i == nx - 1 && j == 0)//7
+				{
+					T_Up = T_Last[(i - 1)*ny + j];
+					T_Down = T_Last[(i - 1)*ny + j];
+					T_Right = T_Last[i*ny + j + 1];
+					T_Left = T_Last[i*ny + j + 1];
+					T_Middle = T_Last[i*ny + j];
+					T_New[i * ny + j] = (a / (dx*dx))*T_Up + (a / (dx*dx))*T_Down + (1 - 2 * a / (dy*dy) - 2 * a / (dx*dx))*T_Middle + (a / (dy*dy))*T_Right + (a / (dy*dy))*T_Left;
+				}
+				else if (i == nx - 1 && j == ny - 1)//8
+				{
+					T_Up = T_Last[(i - 1)*ny + j];
+					T_Down = T_Last[(i - 1)*ny + j];
+					T_Right = T_Last[i*ny + j - 1];
+					T_Left = T_Last[i*ny + j - 1];
+					T_Middle = T_Last[i*ny + j];
+					T_New[i * ny + j] = (a / (dx*dx))*T_Up + (a / (dx*dx))*T_Down + (1 - 2 * a / (dy*dy) - 2 * a / (dx*dx))*T_Middle + (a / (dy*dy))*T_Right + (a / (dy*dy))*T_Left;
+				}
+				else//9
+				{
+					T_Up = T_Last[(i + 1)*ny + j];
+					T_Down = T_Last[(i - 1)*ny + j];
+					T_Right = T_Last[i*ny + j + 1];
+					T_Left = T_Last[i*ny + j - 1];
+					T_Middle = T_Last[i*ny + j];
+					T_New[i * ny + j] = (a / (dx*dx))*T_Up + (a / (dx*dx))*T_Down + (1 - 2 * a / (dy*dy) - 2 * a / (dx*dx))*T_Middle + (a / (dy*dy))*T_Right + (a / (dy*dy))*T_Left;
+				}
+			}
+		}
+	}
+	else
+	{
+		for (int i = 0; i < nx; i++)
+		{
+			for (int j = 0; j < ny; j++)
+			{
+				steel->physicalpara(T_New[i * ny + j]);
+				a = steel->lamda / (steel->pho * steel->ce);
+				if (i == 0 && j != 0 && j != ny - 1)  //1
+				{
+					T_Up = T_New[(i + 1)*ny + j];
+					T_Down = T_New[(i + 1)*ny + j] - 2 * dx*h*(T_New[i*ny + j] - Tw) / steel->lamda;
+					T_Right = T_New[i*ny + j + 1];
+					T_Left = T_New[i*ny + j - 1];
+					T_Middle = T_New[i*ny + j];
+					T_Last[i * ny + j] = (a / (dx*dx))*T_Up + (a / (dx*dx))*T_Down + (1 - 2 * a / (dy*dy) - 2 * a / (dx*dx))*T_Middle + (a / (dy*dy))*T_Right + (a / (dy*dy))*T_Left;
+				}
+				else if (i == nx - 1 && j != 0 && j != ny - 1)//2
+				{
+					T_Up = T_New[(i - 1)*ny + j] - 2 * dx*h*(T_New[i*ny + j] - Tw) / steel->lamda;
+					T_Down = T_New[(i - 1)*ny + j];
+					T_Right = T_New[i*ny + j + 1];
+					T_Left = T_New[i*ny + j - 1];
+					T_Middle = T_New[i*ny + j];
+					T_Last[i * ny + j] = (a / (dx*dx))*T_Up + (a / (dx*dx))*T_Down + (1 - 2 * a / (dy*dy) - 2 * a / (dx*dx))*T_Middle + (a / (dy*dy))*T_Right + (a / (dy*dy))*T_Left;
+				}
+				else if (j == 0 && i != 0 && i != nx - 1)//3
+				{
+					T_Up = T_New[(i + 1)*ny + j];
+					T_Down = T_New[(i - 1)*ny + j];
+					T_Right = T_New[i*ny + j + 1];
+					T_Left = T_New[i*ny + j + 1] - 2 * dy*h*(T_New[i*ny + j] - Tw) / steel->lamda;
+					T_Middle = T_New[i*ny + j];
+					T_Last[i * ny + j] = (a / (dx*dx))*T_Up + (a / (dx*dx))*T_Down + (1 - 2 * a / (dy*dy) - 2 * a / (dx*dx))*T_Middle + (a / (dy*dy))*T_Right + (a / (dy*dy))*T_Left;
+				}
+				else if (j == ny - 1 && i != 0 && i != nx - 1)//4
+				{
+					T_Up = T_New[(i + 1)*ny + j];
+					T_Down = T_New[(i - 1)*ny + j];
+					T_Right = T_New[i*ny + j - 1] - 2 * dy*h*(T_New[i*ny + j] - Tw) / steel->lamda;
+					T_Left = T_New[i*ny + j - 1];
+					T_Middle = T_New[i*ny + j];
+					T_Last[i * ny + j] = (a / (dx*dx))*T_Up + (a / (dx*dx))*T_Down + (1 - 2 * a / (dy*dy) - 2 * a / (dx*dx))*T_Middle + (a / (dy*dy))*T_Right + (a / (dy*dy))*T_Left;
+				}
+				else if (i == 0 && j == 0)//5
+				{
+					T_Up = T_New[(i + 1)*ny + j];
+					T_Down = T_New[(i + 1)*ny + j];
+					T_Right = T_New[i*ny + j + 1];
+					T_Left = T_New[i*ny + j + 1];
+					T_Middle = T_New[i*ny + j];
+					T_Last[i * ny + j] = (a / (dx*dx))*T_Up + (a / (dx*dx))*T_Down + (1 - 2 * a / (dy*dy) - 2 * a / (dx*dx))*T_Middle + (a / (dy*dy))*T_Right + (a / (dy*dy))*T_Left;
+				}
+				else if (i == 0 && j == ny - 1)//6
+				{
+					T_Up = T_New[(i + 1)*ny + j];
+					T_Down = T_New[(i + 1)*ny + j];
+					T_Right = T_New[i*ny + j - 1];
+					T_Left = T_New[i*ny + j - 1];
+					T_Middle = T_New[i*ny + j];
+					T_Last[i * ny + j] = (a / (dx*dx))*T_Up + (a / (dx*dx))*T_Down + (1 - 2 * a / (dy*dy) - 2 * a / (dx*dx))*T_Middle + (a / (dy*dy))*T_Right + (a / (dy*dy))*T_Left;
+				}
+				else if (i == nx - 1 && j == 0)//7
+				{
+					T_Up = T_New[(i - 1)*ny + j];
+					T_Down = T_New[(i - 1)*ny + j];
+					T_Right = T_New[i*ny + j + 1];
+					T_Left = T_New[i*ny + j + 1];
+					T_Middle = T_New[i*ny + j];
+					T_Last[i * ny + j] = (a / (dx*dx))*T_Up + (a / (dx*dx))*T_Down + (1 - 2 * a / (dy*dy) - 2 * a / (dx*dx))*T_Middle + (a / (dy*dy))*T_Right + (a / (dy*dy))*T_Left;
+				}
+				else if (i == nx - 1 && j == ny - 1)//8
+				{
+					T_Up = T_New[(i - 1)*ny + j];
+					T_Down = T_New[(i - 1)*ny + j];
+					T_Right = T_New[i*ny + j - 1];
+					T_Left = T_New[i*ny + j - 1];
+					T_Middle = T_New[i*ny + j];
+					T_Last[i * ny + j] = (a / (dx*dx))*T_Up + (a / (dx*dx))*T_Down + (1 - 2 * a / (dy*dy) - 2 * a / (dx*dx))*T_Middle + (a / (dy*dy))*T_Right + (a / (dy*dy))*T_Left;
+				}
+				else//9
+				{
+					T_Up = T_New[(i + 1)*ny + j];
+					T_Down = T_New[(i - 1)*ny + j];
+					T_Right = T_New[i*ny + j + 1];
+					T_Left = T_New[i*ny + j - 1];
+					T_Middle = T_New[i*ny + j];
+					T_Last[i * ny + j] = (a / (dx*dx))*T_Up + (a / (dx*dx))*T_Down + (1 - 2 * a / (dy*dy) - 2 * a / (dx*dx))*T_Middle + (a / (dy*dy))*T_Right + (a / (dy*dy))*T_Left;
+				}
+			}
+		}
+	}
+	disout = !disout;
+	tstep++;
+	T_Surface[tstep] = T_Last[int((ny - 1) / 2)];
+}
+
+void Temperature2d::boundarycondition2d(ContinuousCaster & CasterOne, float *hinit)
+{
+	float zposition = tstep * tao * vcast;
+	//cout << "z = " << zposition;
+	for (int i = 0; i < CasterOne.section; i++)
+		if (zposition >= *(CasterOne.ccml + i) && zposition <= *(CasterOne.ccml + i + 1))
+			h = *(hinit + i);
+	//cout << "h = " << h << endl;
+}
+
+void Temperature2d::initcondition2d()
+{
+	float T_Cast = 1558.0f;
+	tstep = 0;
+	for (int i = 0; i < nx; i++)
+		for (int j = 0; j < ny; j++)
+		{
+			T_Last[ny * i + j] = T_Cast;
+			T_New[ny * i + j] = T_Cast;
+		}
+	disout = 0;
+}
+
+void Temperature2d::computetemperature2d(float *measuredpoistion, int measurednumb)
+{
+	computetemperature = new float[measurednumb];
+	for (int i = 0; i < measurednumb; i++)
+		for (int j = 0; j < tnpts; j++)
+		{
+			if ((fabs(j * vcast * tao - *(measuredpoistion + i))) <= tao)
+				computetemperature[i] = T_Surface[j];
+		}
+	cout << endl << "computetemperature = " << endl;
+	for (int i = 0; i < measurednumb; i++)
+		cout << computetemperature[i] << ", ";
+	cout << endl;
 }
 
 Temperature::Temperature(int m_nx, int m_ny, int m_nz, int m_tnpts, float m_tf, float m_lx, float m_ly, float m_lz, float m_vcast, ContinuousCaster & m_CasterOne, Steel & m_steel)
@@ -170,7 +430,6 @@ Temperature::~Temperature()
 	delete [] T_New;
 	delete [] T_Last;
 	delete [] T_Surface;
-	delete [] T_Calculation;
 	delete [] meantemperature;
 }
 
@@ -810,15 +1069,11 @@ void Temperature::initcondition3d(float *T_Cast)
 
 void Temperature::computetemperature3d(float *measuredpoistion, int measurednumb)
 {
-	T_Calculation = new float[measurednumb];
+	computetemperature = new float[measurednumb];
 	for (int i = 0; i < measurednumb; i++)
 		for (int j = 0; j < ny; j++)
-		{
 			if (fabs(j * dy - *(measuredpoistion + i)) <= dy)
-			{
-				T_Calculation[i] = T_Surface[j];
-			}
-		}
+				computetemperature[i] = T_Surface[j];
 }
 
 void Temperature::computemeantemperature3d()
@@ -842,11 +1097,6 @@ void Temperature::computemeantemperature3d()
 	}
 
 }
-void Temperature::getmeasuredtemperature(float *measuredtemperature, int measurednumb)
-{
-	for (int i = 0; i < measurednumb; i++)
-		measuredtemperature[i] = T_Calculation[i];
-}
 
 void Temperature::print3d(int measurednumb)
 {
@@ -863,9 +1113,9 @@ void Temperature::print3d(int measurednumb)
 	}
 	else
 	{
-		cout << "T_SurfaceCalculation = " << endl;
+		cout << "computetemperature = " << endl;
 		for (int i = 0; i < measurednumb; i++)
-			cout << T_Calculation[i] << ", ";
+			cout << computetemperature[i] << ", ";
 		cout << endl;
 	}
 }
@@ -1139,8 +1389,8 @@ PSOalgorithm::PSOalgorithm(int m_measurednumb, int m_popsize, float rangeh, floa
 	section = CasterOne.section;
 	measurednumb = m_measurednumb;
 	popsize = m_popsize;
-	c1 = 0.1;
-	c2 = 0.1;
+	c1 = 0.1f;
+	c2 = 0.1f;
 	vmax = 5.0;
 	fitnessvalue = new float[popsize];
 	popv = new float*[popsize];
@@ -1172,7 +1422,7 @@ void PSOalgorithm::fitnessevaluation(float* measuredtemperature, float* measured
 		Temperature3dtemp.computetemperature3d(measuredpoistion, measurednumb);
 		fitnessvalue[i] = 0.0;
 		for (int j = 0; j < measurednumb; j++)
-			fitnessvalue[i] +=(Temperature3dtemp.T_Calculation[j] - measuredtemperature[j]) * (Temperature3dtemp.T_Calculation[j] - measuredtemperature[j]);
+			fitnessvalue[i] +=(Temperature3dtemp.computetemperature[j] - measuredtemperature[j]) * (Temperature3dtemp.computetemperature[j] - measuredtemperature[j]);
 	}
 }
 
@@ -1225,7 +1475,7 @@ int main()
 	float measuredpoistion[measurednumb] = { 0.9463f, 1.6812f, 3.28f, 5.0605f, 7.7188f, 11.6077f, 16.7395f, 24.235f };
 	float *measuredtemperature = new float[measurednumb];
 	float hinit[section] = { 1380.0f,1170.0f,980.0f,800.0f,1223.16f,735.05f,424.32f,392.83f,328.94f,281.64f,246.16f,160.96f };
-	float taimmeantemperature[coolsection] = { 966.149841, 925.864746, 952.322083, 932.175537, 914.607117, 890.494263, 870.804443, 890.595825 };
+	float taimmeantemperature[coolsection] = { 966.149841f, 925.864746f, 952.322083f, 932.175537f, 914.607117f, 890.494263f, 870.804443f, 890.595825f };
 	float *htemp = new float[section];
 	float *hresult = new float[section];
 	float m_lx = 0.25f, m_ly = 0.25f, m_lz = 0.25f, m_tf = 1500.0f, m_vcast = -0.02f, rangeh = 50.0f, T_Cast = 1558.0f, dh = 1.0f;
@@ -1237,7 +1487,16 @@ int main()
 	Steel steel;
 	Optimizationalgorithm Gradientmethod = Optimizationalgorithm(CasterOne, taimmeantemperature);
 
-	clock_t t_start = clock();
+	Temperature2d SteelTemperature2d = Temperature2d(m_nx, m_ny, m_tnpts, m_tf, m_lx, m_ly, m_vcast, CasterOne, steel);
+	SteelTemperature2d.initcondition2d();
+
+	while (SteelTemperature2d.tstep < m_tnpts)
+	{
+		SteelTemperature2d.differencecalculation2d(hinit);
+		SteelTemperature2d.computetemperature2d(measuredpoistion, measurednumb);
+	}
+
+	/*clock_t t_start = clock();
     m_nx = 25;
 	m_ny = 3001;
 	m_nz = 25;
@@ -1318,8 +1577,8 @@ int main()
 		}
 		Gradientmethod.outputdata(SteelTemperature3dplant.tstep, hinit);
 	}
-   clock_t t_end = clock();
-   cout << "The running time is " << (t_end - t_start) << " (ms)"<< endl;
+   clock_t t_end = clock();*/
+   //cout << "The running time is " << (t_end - t_start) << " (ms)"<< endl;
 }
 
 

@@ -1,13 +1,10 @@
 ﻿  HeatTransferModel.cpp
-HeatTransferModel.cpp(1142): warning C4305: “=”: 从“double”到“float”截断
-HeatTransferModel.cpp(1143): warning C4305: “=”: 从“double”到“float”截断
-HeatTransferModel.cpp(1181): warning C4305: “=”: 从“double”到“float”截断
-HeatTransferModel.cpp(1228): warning C4838: 从“double”转换到“float”需要收缩转换
-HeatTransferModel.cpp(1228): warning C4305: “初始化”: 从“double”到“float”截断
+HeatTransferModel.cpp(1431): warning C4305: “=”: 从“double”到“float”截断
+HeatTransferModel.cpp(1482): warning C4101: “sim_tnpts”: 未引用的局部变量
+HeatTransferModel.cpp(1484): warning C4101: “allmeantemperature”: 未引用的局部变量
+HeatTransferModel.cpp(1485): warning C4101: “staticmeantemperature”: 未引用的局部变量
   正在生成代码
-  3 of 154 functions ( 1.9%) were compiled, the rest were copied from previous compilation.
-    1 functions were new in current compilation
-    18 functions had inline decision re-evaluated but remain unchanged
+  All 142 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
   已完成代码的生成
   2D_HeatTransferModel.vcxproj -> C:\Users\Administrator\Desktop\My paper\Dynamic Inverse problem\code\CPU_3DContinuousCastingMPC\Release\2D_HeatTransferModel.exe
   2D_HeatTransferModel.vcxproj -> C:\Users\Administrator\Desktop\My paper\Dynamic Inverse problem\code\CPU_3DContinuousCastingMPC\Release\2D_HeatTransferModel.pdb (Full PDB)
