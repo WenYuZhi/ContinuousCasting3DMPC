@@ -24,7 +24,68 @@ int main()
 	ContinuousCaster CasterOne = ContinuousCaster(section, coolsection, moldsection, ccml);
 	Steel steel;
 	Gradientbasedalgorithm Gradientmethod = Gradientbasedalgorithm(CasterOne, measuredtemperature);
+	Conjugategradient Conjugategradientmethod = Conjugategradient(CasterOne, measuredtemperature);
 	PSOalgorithm PSO = PSOalgorithm(measurednumb, popsize, rangeh, hinit, CasterOne);
+
+	Temperature1d SteelTemperature1d = Temperature1d(m_nx, m_tao, m_lx, m_vcast, CasterOne, steel);
+	Temperature1d SteelTemperature1dtemp = Temperature1d(m_nx, m_tao, m_lx, m_vcast, CasterOne, steel);
+	//float noisemean = 0.0, noisestd = 1.0;
+	//Generatemeasuredtemperature gen_measuredtemperature = Generatemeasuredtemperature(CasterOne, measurednumb, noisemean, noisestd, hinit, measuredpoistion);
+	//gen_measuredtemperature.simulationtemperature(SteelTemperature1d, measuredtemperature);
+
+	allmeantemperature = new float*[CasterOne.coolsection];
+	for (int i = 0; i < CasterOne.coolsection; i++)
+		allmeantemperature[i] = new float[measurednumb];
+	staticmeantemperature = new float[measurednumb];
+
+	SteelTemperature1d.initcondition1d();
+	SteelTemperature1dtemp.initcondition1d();
+
+	for (int i = 0; i < CasterOne.section; i++)
+		htemp[i] = hinit[i] + rangeh * rand() / RAND_MAX;
+
+	for (int iter_time = 0; iter_time < maxiter_time; iter_time++)
+	{
+		for (int i = 0; i < measurednumb + 1; i++)
+		{
+			SteelTemperature1dtemp.initcondition1d();
+			if (i == measurednumb)
+			{
+				for (int j = 0; j < CasterOne.section; j++)
+					hresult[j] = htemp[j];
+				while (SteelTemperature1dtemp.tstep < SteelTemperature1dtemp.tnpts)
+				{
+					SteelTemperature1dtemp.differencecalculation1d(hresult);
+				}
+				SteelTemperature1dtemp.computetemperature1d(measuredpoistion, measurednumb);
+				for (int j = 0; j < CasterOne.coolsection; j++)
+					staticmeantemperature[j] = SteelTemperature1dtemp.computetemperature[j];
+			}
+			else
+			{
+				for (int j = 0; j < CasterOne.section; j++)
+					hresult[j] = htemp[j];
+				hresult[moldsection + i] = hresult[moldsection + i] + dh;
+				while (SteelTemperature1dtemp.tstep < SteelTemperature1dtemp.tnpts)
+				{
+					SteelTemperature1dtemp.differencecalculation1d(hresult);
+				}
+				SteelTemperature1dtemp.computetemperature1d(measuredpoistion, measurednumb);
+				for (int j = 0; j < measurednumb; j++)
+					allmeantemperature[i][j] = SteelTemperature1dtemp.computetemperature[j];
+			}
+		}
+
+		Conjugategradientmethod.init(allmeantemperature, staticmeantemperature, dh);
+		Conjugategradientmethod.gradientcalculation();
+		Conjugategradientmethod.linesearch();
+		Conjugategradientmethod.updateh(htemp);
+		Conjugategradientmethod.print();
+
+		cout << "htemp = " << endl;
+		for (int i = 0; i < CasterOne.section; i++)
+			cout << htemp[i] << ", ";
+	}
 
 	/*Temperature1d SteelTemperature1d = Temperature1d(m_nx, m_tao, m_lx, m_vcast, CasterOne, steel);
 	Temperature1d SteelTemperature1dtemp = Temperature1d(m_nx, m_tao, m_lx, m_vcast, CasterOne, steel);
@@ -49,7 +110,7 @@ int main()
 	}*/
 
 	
-	Temperature1d SteelTemperature1d = Temperature1d(m_nx, m_tao, m_lx, m_vcast, CasterOne, steel);
+	/*Temperature1d SteelTemperature1d = Temperature1d(m_nx, m_tao, m_lx, m_vcast, CasterOne, steel);
 	Temperature1d SteelTemperature1dtemp = Temperature1d(m_nx, m_tao, m_lx, m_vcast, CasterOne, steel);
 	float noisemean = 0.0, noisestd = 1.0;
 	Generatemeasuredtemperature gen_measuredtemperature = Generatemeasuredtemperature(CasterOne, measurednumb, noisemean, noisestd, hinit, measuredpoistion);
@@ -107,7 +168,7 @@ int main()
 		cout << "htemp = " << endl;
 		for (int i = 0; i < CasterOne.section; i++)
 			cout << htemp[i] << ", ";
-	}
+	}*/
 
 
 	/*clock_t t_start = clock();

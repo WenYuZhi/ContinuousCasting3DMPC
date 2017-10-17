@@ -1453,14 +1453,14 @@ void Temperature1d::print1d(int measurednumb)
 
 class Gradientbasedalgorithm
 {
-private:
-	int coolsection;
 public:
+	int coolsection;
 	float** allmeantemperature;
 	float* staticmeantemperature;
 	float* taimmeantemperature;
 	float** Jacobian;
 	float* gradient;
+	float* dk;
 	float dh;
 	float step;
 	float costvalue;
@@ -1474,6 +1474,69 @@ public:
 	void outputdata(int, float*);
 };
 
+class Conjugategradient :public Gradientbasedalgorithm
+{
+    public:
+		float * dk_1;
+		float *gradient_1;
+		float beta;
+		int iter_times;
+		Conjugategradient(ContinuousCaster & CasterOne, float* m_taimmeantemperature);
+		~Conjugategradient();
+		void gradientcalculation();
+		
+};
+
+Conjugategradient::Conjugategradient(ContinuousCaster & CasterOne, float* m_taimmeantemperature):Gradientbasedalgorithm(CasterOne, m_taimmeantemperature)
+{
+	dk_1 = new float[coolsection];
+	gradient_1 = new float[coolsection];
+	iter_times = 0;
+}
+
+Conjugategradient::~Conjugategradient()
+{
+	delete[] dk_1;
+	delete[] gradient_1;
+}
+
+void Conjugategradient::gradientcalculation()
+{
+	float beta1, beta2;
+	iter_times++;
+	for (int i = 0; i < coolsection; i++)
+		for (int j = 0; j < coolsection; j++)
+			Jacobian[i][j] = (allmeantemperature[i][j] - staticmeantemperature[j]) / dh;
+	for (int i = 0; i < coolsection; i++)
+	{
+		gradient[i] = 0.0;
+		for (int j = 0; j < coolsection; j++)
+			gradient[i] = gradient[i] + (taimmeantemperature[j] - staticmeantemperature[j]) * Jacobian[i][j];
+	}
+
+	for (int i = 0; i < coolsection; i++)
+	{
+		if (iter_times == 1)
+		{
+			dk[i] = gradient[i];
+			dk_1[i] = dk[i];
+			gradient_1[i] = gradient[i];
+		}
+		else
+		{
+			beta1 = 0;
+			beta2 = 0;
+			for (int j = 0; j < coolsection; j++)
+			{
+				beta1 += gradient[j] * gradient[j];
+				beta2 += gradient_1[j] * gradient_1[j];
+			}
+			beta = beta1 / beta2;
+			dk[i] = gradient[i] + beta * dk_1[i];
+		}	
+	}
+}
+
 Gradientbasedalgorithm::Gradientbasedalgorithm(ContinuousCaster & CasterOne, float* m_taimmeantemperature)
 {
 	mCasterOne = &CasterOne;
@@ -1486,6 +1549,7 @@ Gradientbasedalgorithm::Gradientbasedalgorithm(ContinuousCaster & CasterOne, flo
 		Jacobian[i] = new float[coolsection];
 	staticmeantemperature = new float[coolsection];
 	gradient = new float[coolsection];
+	dk = new float[coolsection];
 	taimmeantemperature = new float[coolsection];
 	for (int i = 0; i < mCasterOne->coolsection; i++)
 		taimmeantemperature[i] = m_taimmeantemperature[i];
@@ -1501,17 +1565,18 @@ void Gradientbasedalgorithm::gradientcalculation()
 		gradient[i] = 0.0;
 		for (int j = 0; j < coolsection; j++)
 			gradient[i] = gradient[i] + (taimmeantemperature[j] - staticmeantemperature[j]) * Jacobian[i][j];
+		dk[i] = gradient[i];
 	}
 }
 
 void::Gradientbasedalgorithm::linesearch()
 {
-	float step1 = 0.0, step2 = 0.0, eps = 1.0;
+	float step1 = 0.0, step2 = 0.0, eps = 0.0;
 	for (int i = 0; i < coolsection; i++)
 		for (int j = 0; j < coolsection; j++)
 		{
 			step1 += (staticmeantemperature[i] - taimmeantemperature[i])*Jacobian[i][j];
-			step2 += Jacobian[i][j] * gradient[j] * Jacobian[i][j] * gradient[j];
+			step2 += Jacobian[i][j] * dk[j] * Jacobian[i][j] * dk[j];
 		}
 	step = fabs(step1 / (step2 + eps));
 }
@@ -1521,7 +1586,7 @@ void::Gradientbasedalgorithm::updateh(float*hresult)
 	//cout << " h = ";
 	for (int i = 0; i < coolsection; i++)
 	{
-		hresult[i + mCasterOne->moldsection] = hresult[i + mCasterOne->moldsection] + step * gradient[i];
+		hresult[i + mCasterOne->moldsection] = hresult[i + mCasterOne->moldsection] + step * dk[i];
 		//cout  << hresult[i + mCasterOne->moldsection] << " ";
 	}
 
@@ -1793,6 +1858,7 @@ Generatemeasuredtemperature::~Generatemeasuredtemperature()
 	delete[] hinit;
 	delete[] measuredposition;
 }
+
 void Generatemeasuredtemperature::simulationtemperature(Temperature1d & m_SteelTemperature1d, float*measuredtemperature)
 {
 	m_SteelTemperature1d.initcondition1d();
