@@ -1,10 +1,10 @@
 ﻿  HeatTransferModel.cpp
-C:\Users\Administrator\Desktop\My paper\Dynamic Inverse problem\code\CPUcpp_3dcontinuouscastingMPC\2D_HeatTransferModel\classstatement.h(1660): warning C4305: “=”: 从“double”到“float”截断
-HeatTransferModel.cpp(19): warning C4101: “sim_tnpts”: 未引用的局部变量
+C:\Users\Administrator\Desktop\My paper\Dynamic Inverse problem\code\CPUcpp_3dcontinuouscastingMPC\2D_HeatTransferModel\classstatement.h(1696): warning C4305: “=”: 从“double”到“float”截断
+HeatTransferModel.cpp(20): warning C4101: “sim_tnpts”: 未引用的局部变量
   正在生成代码
-  7 of 147 functions ( 4.8%) were compiled, the rest were copied from previous compilation.
+  33 of 169 functions (19.5%) were compiled, the rest were copied from previous compilation.
     0 functions were new in current compilation
-    11 functions had inline decision re-evaluated but remain unchanged
+    12 functions had inline decision re-evaluated but remain unchanged
   已完成代码的生成
   2D_HeatTransferModel.vcxproj -> C:\Users\Administrator\Desktop\My paper\Dynamic Inverse problem\code\CPUcpp_3dcontinuouscastingMPC\Release\2D_HeatTransferModel.exe
   2D_HeatTransferModel.vcxproj -> C:\Users\Administrator\Desktop\My paper\Dynamic Inverse problem\code\CPUcpp_3dcontinuouscastingMPC\Release\2D_HeatTransferModel.pdb (Full PDB)

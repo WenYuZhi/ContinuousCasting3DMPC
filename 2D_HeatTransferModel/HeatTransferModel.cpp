@@ -3,6 +3,7 @@
 #include <math.h>
 #include <stdlib.h> 
 #include <fstream>
+#include <random>
 #include <classstatement.h>
 using namespace std;
 int main()
@@ -15,17 +16,44 @@ int main()
 	float measuredtemperature[measurednumb] = { 937.141f, 930.948f, 960.807f, 932.294f, 916.781f, 892.089f, 872.358f, 899.282f };
 	float *htemp = new float[section];
 	float *hresult = new float[section];
-	float m_lx = 0.25f, m_ly = 1.79f, m_lz = 0.25f, m_tf = 1400.0f, m_vcast = -0.02f, rangeh = 20.0f, T_Cast = 1558.0f, dh = 1.0f, m_tao = 0.25f;
-	int m_nx = 25, m_ny = 179, m_nz = 170, m_tnpts = 1501, sim_tnpts, maxiter_time = 50;
-	int popsize = 10;
+	float m_lx = 0.25f, m_ly = 1.79f, m_lz = 0.25f, m_tf = 1400.0f, m_vcast = -0.02f, rangeh = 50.0f, T_Cast = 1558.0f, dh = 1.0f, m_tao = 0.25f;
+	int m_nx = 25, m_ny = 179, m_nz = 170, m_tnpts = 1501, sim_tnpts, maxiter_time = 100;
+	int popsize = 30;
 	float **allmeantemperature;
 	float *staticmeantemperature;
 	ContinuousCaster CasterOne = ContinuousCaster(section, coolsection, moldsection, ccml);
 	Steel steel;
-	Optimizationalgorithm Gradientmethod = Optimizationalgorithm(CasterOne, measuredtemperature);
+	Gradientbasedalgorithm Gradientmethod = Gradientbasedalgorithm(CasterOne, measuredtemperature);
+	PSOalgorithm PSO = PSOalgorithm(measurednumb, popsize, rangeh, hinit, CasterOne);
 
 	/*Temperature1d SteelTemperature1d = Temperature1d(m_nx, m_tao, m_lx, m_vcast, CasterOne, steel);
 	Temperature1d SteelTemperature1dtemp = Temperature1d(m_nx, m_tao, m_lx, m_vcast, CasterOne, steel);
+
+	allmeantemperature = new float*[CasterOne.coolsection];
+	for (int i = 0; i < CasterOne.coolsection; i++)
+		allmeantemperature[i] = new float[measurednumb];
+	staticmeantemperature = new float[measurednumb];
+
+	SteelTemperature1d.initcondition1d();
+	SteelTemperature1dtemp.initcondition1d();
+
+	for (int i = 0; i < CasterOne.section; i++)
+		htemp[i] = hinit[i] + rangeh * rand() / RAND_MAX;
+
+	for (int iter_time = 0; iter_time < maxiter_time; iter_time++)
+	{
+		PSO.fitnessevaluation(measuredtemperature, measuredpoistion, SteelTemperature1dtemp);
+		PSO.findgbest();
+		PSO.updatepoph();
+		cout << endl;
+	}*/
+
+	
+	Temperature1d SteelTemperature1d = Temperature1d(m_nx, m_tao, m_lx, m_vcast, CasterOne, steel);
+	Temperature1d SteelTemperature1dtemp = Temperature1d(m_nx, m_tao, m_lx, m_vcast, CasterOne, steel);
+	float noisemean = 0.0, noisestd = 1.0;
+	Generatemeasuredtemperature gen_measuredtemperature = Generatemeasuredtemperature(CasterOne, measurednumb, noisemean, noisestd, hinit, measuredpoistion);
+	gen_measuredtemperature.simulationtemperature(SteelTemperature1d, measuredtemperature);
 
 	allmeantemperature = new float*[CasterOne.coolsection];
 	for (int i = 0; i < CasterOne.coolsection; i++)
@@ -79,10 +107,10 @@ int main()
 		cout << "htemp = " << endl;
 		for (int i = 0; i < CasterOne.section; i++)
 			cout << htemp[i] << ", ";
-	}*/
+	}
 
 
-	clock_t t_start = clock();
+	/*clock_t t_start = clock();
 	Temperature2d SteelTemperature2d = Temperature2d(m_nx, m_ny, m_tao, m_lx, m_ly, m_vcast, CasterOne, steel);
 	Temperature2d SteelTemperature2dtemp = Temperature2d(m_nx, m_ny, m_tao, m_lx, m_ly, m_vcast, CasterOne, steel);
 
@@ -141,7 +169,7 @@ int main()
 	cout << endl;
 	}
 	clock_t t_end = clock(); 
-    cout << "The running time is " << (t_end - t_start) << " (ms)"<< endl;
+    cout << "The running time is " << (t_end - t_start) << " (ms)"<< endl;*/
 
 	/*Temperature2d SteelTemperature2d = Temperature2d(m_nx, m_ny, m_tao, m_lx, m_ly, m_vcast, CasterOne, steel);
 	SteelTemperature2d.initcondition2d();

@@ -1451,7 +1451,7 @@ void Temperature1d::print1d(int measurednumb)
 	}
 }
 
-class Optimizationalgorithm
+class Gradientbasedalgorithm
 {
 private:
 	int coolsection;
@@ -1465,7 +1465,7 @@ public:
 	float step;
 	float costvalue;
 	ContinuousCaster* mCasterOne;
-	Optimizationalgorithm(ContinuousCaster &, float*);
+	Gradientbasedalgorithm(ContinuousCaster &, float*);
 	void gradientcalculation();
 	void init(float**, float*, float);
 	void linesearch();
@@ -1474,7 +1474,7 @@ public:
 	void outputdata(int, float*);
 };
 
-Optimizationalgorithm::Optimizationalgorithm(ContinuousCaster & CasterOne, float* m_taimmeantemperature)
+Gradientbasedalgorithm::Gradientbasedalgorithm(ContinuousCaster & CasterOne, float* m_taimmeantemperature)
 {
 	mCasterOne = &CasterOne;
 	coolsection = mCasterOne->coolsection;
@@ -1491,7 +1491,7 @@ Optimizationalgorithm::Optimizationalgorithm(ContinuousCaster & CasterOne, float
 		taimmeantemperature[i] = m_taimmeantemperature[i];
 }
 
-void Optimizationalgorithm::gradientcalculation()
+void Gradientbasedalgorithm::gradientcalculation()
 {
 	for (int i = 0; i < coolsection; i++)
 		for (int j = 0; j < coolsection; j++)
@@ -1504,7 +1504,7 @@ void Optimizationalgorithm::gradientcalculation()
 	}
 }
 
-void::Optimizationalgorithm::linesearch()
+void::Gradientbasedalgorithm::linesearch()
 {
 	float step1 = 0.0, step2 = 0.0, eps = 1.0;
 	for (int i = 0; i < coolsection; i++)
@@ -1516,7 +1516,7 @@ void::Optimizationalgorithm::linesearch()
 	step = fabs(step1 / (step2 + eps));
 }
 
-void::Optimizationalgorithm::updateh(float*hresult)
+void::Gradientbasedalgorithm::updateh(float*hresult)
 {
 	//cout << " h = ";
 	for (int i = 0; i < coolsection; i++)
@@ -1530,7 +1530,7 @@ void::Optimizationalgorithm::updateh(float*hresult)
 		costvalue += (staticmeantemperature[i] - taimmeantemperature[i]) * (staticmeantemperature[i] - taimmeantemperature[i]);
 }
 
-void Optimizationalgorithm::init(float**m_allmeantemperature, float *m_staticmeantemperature, float m_dh)
+void Gradientbasedalgorithm::init(float**m_allmeantemperature, float *m_staticmeantemperature, float m_dh)
 {
 	dh = m_dh;
 	for (int i = 0; i < coolsection; i++)
@@ -1540,7 +1540,7 @@ void Optimizationalgorithm::init(float**m_allmeantemperature, float *m_staticmea
 		staticmeantemperature[i] = m_staticmeantemperature[i];
 }
 
-void Optimizationalgorithm::print()
+void Gradientbasedalgorithm::print()
 {
 	/*cout << endl;
 	cout << "Jacobian = " << endl;
@@ -1564,7 +1564,7 @@ void Optimizationalgorithm::print()
 	cout << "costvalue = " << costvalue << endl;
 }
 
-void Optimizationalgorithm::outputdata(int m_tstep, float*hinit)
+void Gradientbasedalgorithm::outputdata(int m_tstep, float*hinit)
 {
 	ofstream outputfile;
 	if (m_tstep % 10 == 0)
@@ -1596,18 +1596,22 @@ public:
 	int popsize;
 	int measurednumb;
 	int coolsection, moldsection, section;
+	int iter_time;
 	int labelgbest;
 	float *fitnessvalue;
 	float **poph;
 	float **popv;
 	float *pbest;
+	float **pbesth;
 	float *gbest;
 	float c1, c2, omga, vmax;
 	float gbestvalue;
 	PSOalgorithm::PSOalgorithm(int, int, float, float*, ContinuousCaster &);
 	void fitnessevaluation(float*, float*, Temperature &, Temperature &);
+	void fitnessevaluation(float*, float*, Temperature1d &);
 	void findgbest();
 	void updatepoph(float*);
+	void updatepoph();
 	void initpoph(float*, float);
 };
 
@@ -1618,18 +1622,26 @@ PSOalgorithm::PSOalgorithm(int m_measurednumb, int m_popsize, float rangeh, floa
 	section = CasterOne.section;
 	measurednumb = m_measurednumb;
 	popsize = m_popsize;
-	c1 = 0.1f;
-	c2 = 0.1f;
-	vmax = 5.0;
+	iter_time = 0;
+	omga = 0.5f;
+	c1 = 0.2f;
+	c2 = 0.2f;
+	vmax = 5.0f;
 	fitnessvalue = new float[popsize];
-	popv = new float*[popsize];
 	gbest = new float[section];
+	pbest = new float[popsize];
+	pbesth = new float*[popsize];
+	for (int i = 0; i < popsize; i++)
+		pbesth[i] = new float[section];
+	popv = new float*[popsize];
 	for (int i = 0; i < popsize; i++)
 		popv[i] = new float[section];
 	poph = new float*[popsize];
 	for (int i = 0; i < popsize; i++)
 		poph[i] = new float[section];
 	for (int i = 0; i < popsize; i++)
+	{
+		srand((unsigned int)time(NULL) * i);
 		for (int j = 0; j < section; j++)
 		{
 			if (j < moldsection)
@@ -1637,9 +1649,14 @@ PSOalgorithm::PSOalgorithm(int m_measurednumb, int m_popsize, float rangeh, floa
 			else
 				poph[i][j] = hinit[j] + rangeh * rand() / float(RAND_MAX);
 		}
+		//for (int j = 0; j < section; j++)
+		  //  cout << poph[i][j] << ", ";
+		//cout << endl;
+	}
+		
 	for (int i = 0; i < popsize; i++)
 		for (int j = 0; j < section; j++)
-			popv[i][j] = 0.0;
+			popv[i][j] = rand() / float(RAND_MAX);
 }
 
 void PSOalgorithm::fitnessevaluation(float* measuredtemperature, float* measuredpoistion, Temperature & Temperature3dmodellast, Temperature & Temperature3dtemp)
@@ -1653,11 +1670,35 @@ void PSOalgorithm::fitnessevaluation(float* measuredtemperature, float* measured
 		for (int j = 0; j < measurednumb; j++)
 			fitnessvalue[i] += (Temperature3dtemp.computetemperature[j] - measuredtemperature[j]) * (Temperature3dtemp.computetemperature[j] - measuredtemperature[j]);
 	}
+	iter_time++;
+}
+
+void PSOalgorithm::fitnessevaluation(float* measuredtemperature, float* measuredpoistion, Temperature1d & m_Temperature1d)
+{
+	cout << "fitness value = " << endl;
+	for (int i = 0; i < popsize; i++)
+	{
+		m_Temperature1d.initcondition1d();
+		while (m_Temperature1d.tstep < m_Temperature1d.tnpts)
+		    m_Temperature1d.differencecalculation1d(poph[i]);
+		m_Temperature1d.computetemperature1d(measuredpoistion, measurednumb);
+		fitnessvalue[i] = 0.0;
+		for (int j = 0; j < measurednumb; j++)
+		{
+			fitnessvalue[i] += (m_Temperature1d.computetemperature[j] - measuredtemperature[j]) * (m_Temperature1d.computetemperature[j] - measuredtemperature[j]);
+		}
+		cout << fitnessvalue[i] << ", ";
+	}
 }
 
 void PSOalgorithm::findgbest()
 {
 	gbestvalue = 10e10;
+	if(iter_time == 1)
+	{
+		for (int i = 0; i < popsize; i++)
+			pbest[i] = fitnessvalue[i];
+	}
 	for (int i = 0; i < popsize; i++)
 	{
 		if (fitnessvalue[i] < gbestvalue)
@@ -1665,9 +1706,20 @@ void PSOalgorithm::findgbest()
 			gbestvalue = fitnessvalue[i];
 			labelgbest = i;
 		}
+		if (fitnessvalue[i] < pbest[i])
+		{
+			pbest[i] = fitnessvalue[i];
+			for (int j = 0; j < section; j++)
+				pbesth[i][j] = poph[i][j];
+		}
 	}
+	cout << "gbest = ";
 	for (int i = 0; i < section; i++)
+	{
 		gbest[i] = poph[labelgbest][i];
+		cout << gbest[i] << ", ";
+	}	
+	cout << "gbestvalue = " << gbestvalue << endl;
 }
 
 void PSOalgorithm::initpoph(float*hinit, float rangeh)
@@ -1687,7 +1739,7 @@ void PSOalgorithm::updatepoph(float*hresult)
 	for (int i = 0; i < popsize; i++)
 		for (int j = moldsection; j < section; j++)
 		{
-			popv[i][j] = omga * popv[i][j] + c1* rand() * (gbest[j] - poph[i][j]);
+			popv[i][j] = omga * popv[i][j] + c1* rand() * (gbest[j] - poph[i][j]) + c2 * rand() * (pbesth[i][j] - poph[i][j]);
 			if (fabs(popv[i][j]) < vmax)
 				poph[i][j] = poph[i][j] + popv[i][j];
 			else
@@ -1695,4 +1747,62 @@ void PSOalgorithm::updatepoph(float*hresult)
 		}
 	for (int j = moldsection; j < section; j++)
 		hresult[j] = pbest[j];
+}
+
+void PSOalgorithm::updatepoph()
+{
+	for (int i = 0; i < popsize; i++)
+		for (int j = moldsection; j < section; j++)
+		{
+			popv[i][j] = omga * popv[i][j] + c1* rand() * (gbest[j] - poph[i][j]);
+			if (fabs(popv[i][j]) < vmax)
+				poph[i][j] = poph[i][j] + popv[i][j];
+			else
+				poph[i][j] = poph[i][j] + popv[i][j] * vmax / fabs(popv[i][j]);
+		}
+}
+
+class Generatemeasuredtemperature
+{
+    public:
+	    float* hinit;
+		float* measuredposition;
+	    float noisemean, noisestd;
+		int measurednumb;
+		void simulationtemperature(Temperature1d &, float*);
+		Generatemeasuredtemperature(ContinuousCaster &, int, float, float, float *, float *);
+		~Generatemeasuredtemperature();
+
+};
+
+Generatemeasuredtemperature::Generatemeasuredtemperature(ContinuousCaster & mCasterOne, int m_measurednumb, float m_noisemean, float m_noisestd, float* m_hinit, float* m_measuredposition)
+{
+	measurednumb = m_measurednumb;
+	noisemean = m_noisemean;
+	noisestd = m_noisestd;
+	hinit = new float[mCasterOne.section];
+	for (int i = 0; i < mCasterOne.section; i++)
+		hinit[i] = m_hinit[i];
+	measuredposition = new float[m_measurednumb];
+	for (int i = 0; i < m_measurednumb; i++)
+		measuredposition[i] = m_measuredposition[i];
+}
+
+Generatemeasuredtemperature::~Generatemeasuredtemperature()
+{
+	delete[] hinit;
+	delete[] measuredposition;
+}
+void Generatemeasuredtemperature::simulationtemperature(Temperature1d & m_SteelTemperature1d, float*measuredtemperature)
+{
+	m_SteelTemperature1d.initcondition1d();
+	while (m_SteelTemperature1d.tstep < m_SteelTemperature1d.tnpts)
+		m_SteelTemperature1d.differencecalculation1d(hinit);
+	m_SteelTemperature1d.computetemperature1d(measuredposition, measurednumb);
+	default_random_engine gen;
+	normal_distribution<float> randn(noisemean, noisestd);
+	for (int j = 0; j < measurednumb; j++)
+		measuredtemperature[j] = m_SteelTemperature1d.computetemperature[j] + randn(gen);
+	for (int j = 0; j < measurednumb; j++)
+		cout << measuredtemperature[j] << ", ";
 }
