@@ -109,7 +109,6 @@ int main()
 		cout << endl;
 	}*/
 
-	
 	/*Temperature1d SteelTemperature1d = Temperature1d(m_nx, m_tao, m_lx, m_vcast, CasterOne, steel);
 	Temperature1d SteelTemperature1dtemp = Temperature1d(m_nx, m_tao, m_lx, m_vcast, CasterOne, steel);
 	float noisemean = 0.0, noisestd = 1.0;
@@ -169,7 +168,6 @@ int main()
 		for (int i = 0; i < CasterOne.section; i++)
 			cout << htemp[i] << ", ";
 	}*/
-
 
 	/*clock_t t_start = clock();
 	Temperature2d SteelTemperature2d = Temperature2d(m_nx, m_ny, m_tao, m_lx, m_ly, m_vcast, CasterOne, steel);
@@ -249,9 +247,9 @@ int main()
 	m_lx = 0.25;
 	m_ly = 28.599f;
 	m_lz = 0.25;
-	m_tnpts = 10001;
-	m_tf = 2000.0f;
-	sim_tnpts = 0;
+	m_tnpts = 15001;
+	m_tf = 3000.0f;
+	sim_tnpts = 10001;
 	Temperature SteelTemperature3dplant = Temperature(m_nx, m_ny, m_nz, m_tnpts, m_tf, m_lx, m_ly, m_lz, m_vcast, CasterOne, steel);
 	Temperature SteelTemperature3dmodel = Temperature(m_nx, m_ny, m_nz, m_tnpts, m_tf, m_lx, m_ly, m_lz, m_vcast, CasterOne, steel);
 	Temperature SteelTemperature3dtemp = Temperature(m_nx, m_ny, m_nz, m_tnpts, m_tf, m_lx, m_ly, m_lz, m_vcast, CasterOne, steel);
@@ -261,7 +259,8 @@ int main()
 		allmeantemperature[i] = new float[CasterOne.coolsection];
 	staticmeantemperature = new float[CasterOne.coolsection];
 		
-	SteelTemperature3dplant.initcondition3d(T_Cast);	
+	SteelTemperature3dplant.initcondition3d(T_Cast);
+	SteelTemperature3dplant.setvcast(m_vcast, T_Cast);
 	while (SteelTemperature3dplant.tstep <= sim_tnpts)
 	{
 		if (SteelTemperature3dplant.tstep % 100 == 0)
@@ -275,8 +274,10 @@ int main()
 	SteelTemperature3dtemp = SteelTemperature3dplant;
 	SteelTemperature3dmodel = SteelTemperature3dplant;
 
+	m_vcast = -0.025f;
 	while (SteelTemperature3dplant.tstep < m_tnpts && SteelTemperature3dplant.tstep > sim_tnpts)
 	{	
+	    SteelTemperature3dmodel.setvcast(m_vcast, T_Cast);
 		if (SteelTemperature3dplant.tstep % 1 == 0)
 		{
 			for (int i = 0; i < CasterOne.coolsection + 1; i++)
